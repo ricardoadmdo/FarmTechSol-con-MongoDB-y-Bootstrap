@@ -29,5 +29,7 @@ app.use('/api/curso', require('./routes/cursoRoutes.js'));
 
 //Escuchar peticiones
 app.listen(process.env.PORT, () => {
-	console.log(styleText('blue', `Backend corriendo en el puerto: ${process.env.PORT}`));
+	console.log(
+		styleText('blue', `Backend corriendo en el puerto: ${process.env.PORT}`)
+	);
 });
