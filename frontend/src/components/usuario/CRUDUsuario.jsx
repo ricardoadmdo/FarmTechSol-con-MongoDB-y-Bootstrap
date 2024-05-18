@@ -32,10 +32,7 @@ export const CRUDUsuario = () => {
 				limpiarCampos();
 				Swal.fire({
 					title: '<strong>Registro exitoso!!!</strong>',
-					html:
-						'<i>El usuario <strong>' +
-						nombre +
-						'</strong> fue registrado con éxito</i>',
+					html: '<i>El usuario <strong>' + nombre + '</strong> fue registrado con éxito</i>',
 					icon: 'success',
 					timer: 3000,
 				});
@@ -61,10 +58,7 @@ export const CRUDUsuario = () => {
 				limpiarCampos();
 				Swal.fire({
 					title: '<strong>Actualización exitosa!!!</strong>',
-					html:
-						'<i>El usuario <strong>' +
-						nombre +
-						'</strong> fue actualizado con éxito</i>',
+					html: '<i>El usuario <strong>' + nombre + '</strong> fue actualizado con éxito</i>',
 					icon: 'success',
 					timer: 3000,
 				});
@@ -78,7 +72,7 @@ export const CRUDUsuario = () => {
 			});
 	};
 
-	const deleteUser = val => {
+	const deleteUser = (val) => {
 		Swal.fire({
 			title: 'Confirmar eliminado?',
 			html: '<i>Realmente desea eliminar a <strong>' + val.nombre + '</strong>?</i>',
@@ -88,7 +82,7 @@ export const CRUDUsuario = () => {
 			cancelButtonColor: '#d33',
 			confirmButtonText: 'Si, eliminarlo!',
 		})
-			.then(result => {
+			.then((result) => {
 				if (result.isConfirmed) {
 					Axios.delete(`http://localhost:3001/api/users/delete/${val._id}`).then(() => {
 						getUsuarios();
@@ -118,15 +112,15 @@ export const CRUDUsuario = () => {
 
 	const getUsuarios = () => {
 		Axios.get('http://localhost:3001/api/users/usuarios')
-			.then(response => {
+			.then((response) => {
 				setUsuarios(response.data.usuarios);
 			})
-			.catch(error => {
+			.catch((error) => {
 				console.log(error);
 			});
 	};
 
-	const validar = event => {
+	const validar = (event) => {
 		event.preventDefault();
 		if (nombre.trim() === '' || email.trim() === '') {
 			Swal.fire({
@@ -169,16 +163,11 @@ export const CRUDUsuario = () => {
 
 	//VISTAS
 	return (
-		<div className='container-fluid  '>
+		<div className='container-fluid'>
 			<div className='row mt-3'>
 				<div className='col-md-4 offset-md-4'>
 					<div className='d-grid mx-auto'>
-						<button
-							onClick={() => openModal(1)}
-							className='btn btn-dark'
-							data-bs-toggle='modal'
-							data-bs-target='#modalUsuarios'
-						>
+						<button onClick={() => openModal(1)} className='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modalUsuarios'>
 							<i className='fa-solid fa-circle-plus'></i> Añadir nuevo Usuario
 						</button>
 					</div>
@@ -199,7 +188,7 @@ export const CRUDUsuario = () => {
 								</tr>
 							</thead>
 							<tbody className='table-group-divider'>
-								{usuariosList.map(val => (
+								{usuariosList.map((val) => (
 									<tr key={val._id}>
 										<td>{val._id}</td>
 										<td>{val.nombre}</td>
@@ -209,13 +198,7 @@ export const CRUDUsuario = () => {
 											<button
 												type='button'
 												onClick={() => {
-													openModal(
-														2,
-														val._id,
-														val.nombre,
-														val.email,
-														val.rol
-													);
+													openModal(2, val._id, val.nombre, val.email, val.rol);
 												}}
 												className='btn btn-warning'
 												data-bs-toggle='modal'
@@ -253,12 +236,7 @@ export const CRUDUsuario = () => {
 					<div className='modal-content'>
 						<div className='modal-header'>
 							<label className='modal-title h5'>{title}</label>
-							<button
-								type='button'
-								className='btn-close'
-								data-bs-dismiss='modal'
-								aria-label='Close'
-							>
+							<button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close'>
 								{' '}
 							</button>
 						</div>
@@ -274,7 +252,7 @@ export const CRUDUsuario = () => {
 										className='form-control'
 										placeholder='Ingrese un nombre'
 										value={nombre}
-										onChange={event => setNombre(event.target.value)}
+										onChange={(event) => setNombre(event.target.value)}
 									></input>
 								</div>
 								<div className='input-group mb-3'>
@@ -285,7 +263,7 @@ export const CRUDUsuario = () => {
 										className='form-control'
 										placeholder='Ingrese un correo electrónico'
 										value={email}
-										onChange={event => setEmail(event.target.value)}
+										onChange={(event) => setEmail(event.target.value)}
 									></input>
 								</div>
 
@@ -298,7 +276,7 @@ export const CRUDUsuario = () => {
 											className='form-control'
 											placeholder='Ingrese una contraseña'
 											value={password}
-											onChange={event => setPassword(event.target.value)}
+											onChange={(event) => setPassword(event.target.value)}
 										></input>
 									</div>
 								)}
@@ -308,7 +286,7 @@ export const CRUDUsuario = () => {
 										defaultValue='Usuario'
 										className='form-select'
 										aria-label='Default select example'
-										onChange={event => setRol(event.target.value)}
+										onChange={(event) => setRol(event.target.value)}
 									>
 										<option>Usuario</option>
 										<option>Administrador</option>
@@ -322,12 +300,7 @@ export const CRUDUsuario = () => {
 							</div>
 
 							<div className='modal-footer'>
-								<button
-									id='btnCerrar'
-									type='button'
-									className='btn btn-secondary'
-									data-bs-dismiss='modal'
-								>
+								<button id='btnCerrar' type='button' className='btn btn-secondary' data-bs-dismiss='modal'>
 									<i className='fa fa-times'></i> Cerrar
 								</button>
 							</div>

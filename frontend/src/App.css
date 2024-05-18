@@ -330,3 +330,13 @@ body {
 	-webkit-animation-duration: 0.5s;
 	animation-duration: 0.5s;
 }
+
+.App {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.card-img-top {
+	min-height: 200px; /* Ajusta esto al valor mínimo deseado */
+}

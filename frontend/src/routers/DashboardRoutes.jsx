@@ -8,6 +8,7 @@ import { Productos } from '../components/producto/Productos.jsx';
 import { CRUDProducto } from '../components/producto/CRUDProducto.jsx';
 import { Carrito } from '../components/producto/Carrito.jsx';
 import { Perfil } from '../components/usuario/Perfil.jsx';
+import Footer from '../components/footer/Footer.jsx';
 
 export const DashboardRoutes = () => {
 	return (
@@ -24,6 +25,7 @@ export const DashboardRoutes = () => {
 				<Route path='producto' element={<CRUDProducto />} />
 				<Route path='carrito' element={<Carrito />} />
 			</Routes>
+			<Footer />
 		</>
 	);
 };

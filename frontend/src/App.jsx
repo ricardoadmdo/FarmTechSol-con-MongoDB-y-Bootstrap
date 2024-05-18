@@ -4,9 +4,11 @@ import './App.css';
 
 export const App = () => {
 	return (
-		<AuthProvider>
-			<AppRouter />
-		</AuthProvider>
+		<div className='App'>
+			<AuthProvider>
+				<AppRouter />
+			</AuthProvider>
+		</div>
 	);
 };
 
