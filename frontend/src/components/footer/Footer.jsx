@@ -14,7 +14,7 @@ const Footer = () => {
 			}}
 		>
 			<p>
-				Desarrollado por Ricardo Alejandro D´Escoubet Montes de Oca <a href='https://github.com/ricardoadmdo'>GitHub de Ricardo</a>{' '}
+				Desarrollado por Ricardo Alejandro DEscoubet Montes de Oca <a href='https://github.com/ricardoadmdo'>GitHub de Ricardo</a>{' '}
 				{new Date().getFullYear()}
 			</p>
 		</footer>
