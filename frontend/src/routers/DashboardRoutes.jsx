@@ -9,6 +9,7 @@ import { CRUDProducto } from '../components/producto/CRUDProducto.jsx';
 import { Carrito } from '../components/producto/Carrito.jsx';
 import { Perfil } from '../components/usuario/Perfil.jsx';
 import Footer from '../components/footer/Footer.jsx';
+import { AdminRoute } from './AdminRoute.jsx';
 
 export const DashboardRoutes = () => {
 	return (
@@ -18,12 +19,33 @@ export const DashboardRoutes = () => {
 			<Routes>
 				<Route path='about' element={<About />} />
 				<Route path='perfil' element={<Perfil />} />
-				<Route path='AdminCurso' element={<CRUDCurso />} />
 				<Route path='cursos' element={<Curso />} />
-				<Route path='usuarios' element={<CRUDUsuario />} />
 				<Route path='compra' element={<Productos />} />
-				<Route path='producto' element={<CRUDProducto />} />
 				<Route path='carrito' element={<Carrito />} />
+				<Route
+					path='producto'
+					element={
+						<AdminRoute>
+							<CRUDProducto />
+						</AdminRoute>
+					}
+				/>
+				<Route
+					path='AdminCurso'
+					element={
+						<AdminRoute>
+							<CRUDCurso />
+						</AdminRoute>
+					}
+				/>
+				<Route
+					path='usuarios'
+					element={
+						<AdminRoute>
+							<CRUDUsuario />
+						</AdminRoute>
+					}
+				/>
 			</Routes>
 			<Footer />
 		</>
