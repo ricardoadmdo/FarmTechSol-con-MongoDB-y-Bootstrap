@@ -1,64 +1,66 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
+import TablaCRUD from '../reutilizable-tablaCrud/TablaCRUD.jsx';
+import { AuthContext } from '../../auth/authContext.jsx';
 
 export const CRUDUsuario = () => {
-	const [nombre, setNombre] = useState('');
-	const [password, setPassword] = useState('');
-	const [email, setEmail] = useState('');
-	const [rol, setRol] = useState('Usuario');
 	const [id, setId] = useState('');
-	const [operation, setOperation] = useState(1);
+	const [formState, setFormState] = useState({
+		nombre: '',
+		password: '',
+		email: '',
+		rol: 'Usuario', // Valor predeterminado para el rol
+	});
+	const [operationMode, setOperationMode] = useState(1);
 	const [usuariosList, setUsuarios] = useState([]);
 	const [title, setTitle] = useState('');
+	const { user } = useContext(AuthContext);
 
 	const limpiarCampos = () => {
-		setNombre('');
-		setPassword('');
-		setEmail('');
-		setRol('');
-		setId('');
+		setFormState({
+			nombre: '',
+			password: '',
+			email: '',
+			rol: 'Usuario',
+		});
 	};
 
 	const add = () => {
-		Axios.post('http://localhost:3001/api/users/create', {
-			nombre: nombre,
-			password: password,
-			email: email,
-			rol: rol,
-		})
+		Axios.post('http://localhost:3001/api/users/create', formState)
 			.then(() => {
 				getUsuarios();
 				limpiarCampos();
 				Swal.fire({
 					title: '<strong>Registro exitoso!!!</strong>',
-					html: '<i>El usuario <strong>' + nombre + '</strong> fue registrado con éxito</i>',
+					html: '<i>El usuario <strong>' + formState.nombre + '</strong> fue registrado con éxito</i>',
 					icon: 'success',
 					timer: 3000,
 				});
 			})
-			.catch(function (error) {
+			.catch((error) => {
+				const errorMessage =
+					error.response && error.response.data && error.response.data.error
+						? error.response.data.error
+						: 'Error desconocido al agregar un usuario';
 				Swal.fire({
 					icon: 'error',
-					title: 'Oops...',
-					text: error.response.data.msg,
+					title: 'Error al agregar un usuario',
+					text: errorMessage,
 				});
 			});
 	};
 
 	const update = () => {
-		Axios.put('http://localhost:3001/api/users/update', {
-			id: id,
-			nombre: nombre,
-			email: email,
-			rol: rol,
-		})
+		// eslint-disable-next-line no-unused-vars
+		const { password, ...dataToUpdate } = formState; // Destructura para excluir la contraseña
+		Axios.put(`http://localhost:3001/api/users/update/${id}`, dataToUpdate)
 			.then(() => {
 				getUsuarios();
 				limpiarCampos();
 				Swal.fire({
 					title: '<strong>Actualización exitosa!!!</strong>',
-					html: '<i>El usuario <strong>' + nombre + '</strong> fue actualizado con éxito</i>',
+					html: '<i>El usuario <strong>' + formState.nombre + '</strong> fue actualizado con éxito</i>',
 					icon: 'success',
 					timer: 3000,
 				});
@@ -84,7 +86,11 @@ export const CRUDUsuario = () => {
 		})
 			.then((result) => {
 				if (result.isConfirmed) {
-					Axios.delete(`http://localhost:3001/api/users/delete/${val._id}`).then(() => {
+					Axios.delete(`http://localhost:3001/api/users/delete/${val.uid}`, {
+						headers: {
+							'x-token': user.token,
+						},
+					}).then(() => {
 						getUsuarios();
 						limpiarCampos();
 						Swal.fire({
@@ -122,192 +128,98 @@ export const CRUDUsuario = () => {
 
 	const validar = (event) => {
 		event.preventDefault();
-		if (nombre.trim() === '' || email.trim() === '') {
+		const { nombre, email, password, rol } = formState;
+
+		// Verifica que los campos 'nombre', 'email' y 'rol' no estén vacíos
+		if (nombre.trim() === '' || email.trim() === '' || rol.trim() === '') {
 			Swal.fire({
 				icon: 'error',
 				title: 'Campos Vacíos',
 				text: 'Todos los campos son obligatorios',
 			});
-		} else {
-			if (operation === 1) {
-				add();
-			}
-
-			if (operation === 2) {
-				update();
-			}
-
-			document.getElementById('btnCerrar').click();
-			getUsuarios();
+			return; // Detiene la ejecución si hay campos vacíos
 		}
+
+		// Si estamos en modo de creación, verifica la contraseña
+		if (operationMode === 1) {
+			if (!password || password.length < 6) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Contraseña no válida',
+					text: 'La contraseña tiene que tener 6 o más caracteres',
+				});
+				return; // Detiene la ejecución si la contraseña no es válida
+			}
+			add(); // Llama a la función para agregar un nuevo usuario
+		} else if (operationMode === 2) {
+			update(); // Llama a la función para actualizar un usuario existente
+		}
+
+		document.getElementById('btnCerrar').click();
+		getUsuarios();
 	};
 
-	const openModal = (op, id, nombre, email, rol) => {
-		setId('');
-		setNombre('');
-		setEmail('');
-		setOperation(op);
-		if (op === 1) {
-			setTitle('Registrar Usuario');
-		} else if (op === 2) {
-			setId(id);
-			setTitle('Editar Usuario');
-			setNombre(nombre);
-			setEmail(email);
-			setRol(rol);
+	const openModal = (op, usuario) => {
+		// Reinicia el estado del formulario para un nuevo usuario o carga los datos para editar
+		setFormState({
+			nombre: op === 2 ? usuario.nombre : '',
+			password: '', // La contraseña siempre debe estar vacía al abrir el modal
+			email: op === 2 ? usuario.email : '',
+			rol: op === 2 ? usuario.rol : 'Usuario', // Valor predeterminado para el rol
+		});
+
+		// Establece el modo de operación y el título del modal
+		setOperationMode(op);
+		setTitle(op === 1 ? 'Registrar Usuario' : 'Editar Usuario');
+
+		// Si es modo de edición, establece el ID
+		if (op === 2) {
+			setId(usuario.uid);
+		} else {
+			setId('');
 		}
-		window.setTimeout(function () {
+
+		// Enfoca el primer campo del formulario después de un breve retraso
+		window.setTimeout(() => {
 			document.getElementById('nombre').focus();
 		}, 500);
 	};
 
-	//VISTAS
 	return (
-		<div className='container-fluid'>
-			<div className='row mt-3'>
-				<div className='col-md-4 offset-md-4'>
-					<div className='d-grid mx-auto'>
-						<button onClick={() => openModal(1)} className='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modalUsuarios'>
-							<i className='fa-solid fa-circle-plus'></i> Añadir nuevo Usuario
-						</button>
-					</div>
-				</div>
-			</div>
-
-			<div className='row mt-3 animate__animated animate__fadeIn'>
-				<div className='card-body'>
-					<div className='table-responsive'>
-						<table className='table table-bordered'>
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>Nombre</th>
-									<th>Correo Electrónico</th>
-									<th>Rol</th>
-									<th>Acciones</th>
-								</tr>
-							</thead>
-							<tbody className='table-group-divider'>
-								{usuariosList.map((val) => (
-									<tr key={val._id}>
-										<td>{val._id}</td>
-										<td>{val.nombre}</td>
-										<td>{val.email}</td>
-										<td>{val.rol}</td>
-										<td>
-											<button
-												type='button'
-												onClick={() => {
-													openModal(2, val._id, val.nombre, val.email, val.rol);
-												}}
-												className='btn btn-warning'
-												data-bs-toggle='modal'
-												data-bs-target='#modalUsuarios'
-											>
-												<i className='fa fa-edit'></i>
-												Editar
-											</button>
-											<span style={{ marginRight: '0px' }}></span>
-											<button
-												type='button'
-												onClick={() => {
-													deleteUser(val);
-												}}
-												className='btn btn-danger'
-											>
-												<i className='fa fa-trash'></i>
-												Eliminar
-											</button>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-			<div
-				className='modal fade animate__animated animate__fadeIn'
-				id='modalUsuarios'
-				aria-hidden='true'
-				aria-labelledby='exampleModalToggleLabel'
-			>
-				<div className='modal-dialog modal-dialog-centered'>
-					<div className='modal-content'>
-						<div className='modal-header'>
-							<label className='modal-title h5'>{title}</label>
-							<button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close'>
-								{' '}
-							</button>
-						</div>
-						<div className='modal-body'>
-							<input type='hidden' id='id'></input>
-
-							<form id='Form' onSubmit={validar}>
-								<div className='input-group mb-3'>
-									<span className='input-group-text'>Nombre:</span>
-									<input
-										type='text'
-										id='nombre'
-										className='form-control'
-										placeholder='Ingrese un nombre'
-										value={nombre}
-										onChange={(event) => setNombre(event.target.value)}
-									></input>
-								</div>
-								<div className='input-group mb-3'>
-									<span className='input-group-text'>Correo Electrónico:</span>
-									<input
-										type='email'
-										id='email'
-										className='form-control'
-										placeholder='Ingrese un correo electrónico'
-										value={email}
-										onChange={(event) => setEmail(event.target.value)}
-									></input>
-								</div>
-
-								{operation === 1 && (
-									<div className='input-group mb-3'>
-										<span className='input-group-text'>Contraseña:</span>
-										<input
-											type='password'
-											id='password'
-											className='form-control'
-											placeholder='Ingrese una contraseña'
-											value={password}
-											onChange={(event) => setPassword(event.target.value)}
-										></input>
-									</div>
-								)}
-								<div className='input-group mb-3'>
-									<span className='input-group-text'>Rol:</span>
-									<select
-										defaultValue='Usuario'
-										className='form-select'
-										aria-label='Default select example'
-										onChange={(event) => setRol(event.target.value)}
-									>
-										<option>Usuario</option>
-										<option>Administrador</option>
-									</select>
-								</div>
-							</form>
-							<div className='d-grid col-6 mx-auto'>
-								<button type='submit' form='Form' className='btn btn-success'>
-									<i className='fa fa-floppy-disk'></i> Guardar
-								</button>
-							</div>
-
-							<div className='modal-footer'>
-								<button id='btnCerrar' type='button' className='btn btn-secondary' data-bs-dismiss='modal'>
-									<i className='fa fa-times'></i> Cerrar
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<>
+			<TablaCRUD
+				data={usuariosList}
+				onAdd={() => openModal(1)}
+				columns={[
+					{ header: 'ID', accessor: 'uid' },
+					{ header: 'Nombre', accessor: 'nombre' },
+					{ header: 'email Electrónico', accessor: 'email' },
+					{ header: 'Rol', accessor: 'rol' },
+				]}
+				onEdit={(usuario) => openModal(2, usuario)}
+				onDelete={deleteUser}
+				title={title}
+				modalTitle='Añadir nuevo Usuario'
+				validate={validar}
+				operationMode={operationMode}
+				setOperationMode={setOperationMode}
+				formFields={[
+					{ name: 'nombre', label: 'Nombre', placeholder: 'Ingrese un nombre', type: 'text' },
+					{ name: 'password', label: 'Contraseña', placeholder: 'Ingrese una contraseña', type: 'password' },
+					{ name: 'email', label: 'Correo Electrónico', placeholder: 'Ingrese un correo electrónico', type: 'email' },
+					{
+						name: 'rol',
+						label: 'Rol',
+						type: 'select',
+						options: [
+							{ value: 'Usuario', label: 'Usuario' },
+							{ value: 'Administrador', label: 'Administrador' },
+						],
+					},
+				]}
+				formState={formState}
+				setFormState={setFormState}
+			/>
+		</>
 	);
 };

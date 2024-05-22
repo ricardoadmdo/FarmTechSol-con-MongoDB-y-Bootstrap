@@ -1,15 +1,7 @@
 const express = require('express');
 const { check } = require('express-validator');
 const router = express.Router();
-const {
-	createUserRegister,
-	loginUsuario,
-	getUsuarios,
-	createUser,
-	updateUser,
-	deleteUser,
-	changeName,
-} = require('../controllers/userController.js');
+const { createUserRegister, loginUsuario, getUsuarios, createUser, updateUser, deleteUser, changeName } = require('../controllers/userController.js');
 const { validarCampos } = require('../middlewares/validar-campos.js');
 
 router.post(
@@ -41,7 +33,7 @@ router.post(
 
 router.get('/usuarios', getUsuarios);
 router.post('/create', createUser);
-router.put('/update', updateUser);
+router.put('/update/:id', updateUser);
 router.delete('/delete/:id', deleteUser);
 router.put('/change', changeName);
 

@@ -1,17 +1,11 @@
-const express = require("express");
-const { check } = require("express-validator");
+const express = require('express');
+const { check } = require('express-validator');
 const router = express.Router();
-const {
-    getCursos,
-    createCurso,
-    updateCurso,
-    deleteCurso,
-} = require("../controllers/cursoController.js");
-const { validarCampos } = require("../middlewares/validar-campos.js");
+const { getCursos, createCurso, updateCurso, deleteCurso } = require('../controllers/cursoController.js');
 
-router.get("/cursos", getCursos);
-router.post("/create", createCurso);
-router.put("/update", updateCurso);
-router.delete("/delete/:id", deleteCurso);
+router.get('/cursos', getCursos);
+router.post('/create', createCurso);
+router.put('/update', updateCurso);
+router.delete('/delete/:id', deleteCurso);
 
 module.exports = router;

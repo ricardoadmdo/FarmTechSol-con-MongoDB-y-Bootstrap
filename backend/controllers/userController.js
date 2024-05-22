@@ -1,4 +1,4 @@
-const { response } = require('express');
+const { response, request } = require('express');
 const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario.js');
 const { generarJWT } = require('../helpers/jwt.js');
@@ -93,13 +93,9 @@ const changeName = async (req, res = response) => {
 			nombre,
 		};
 
-		const usuarioActualizado = await Usuario.findByIdAndUpdate(
-			usuarioId,
-			nuevoUsuario,
-			{
-				new: true,
-			}
-		);
+		const usuarioActualizado = await Usuario.findByIdAndUpdate(usuarioId, nuevoUsuario, {
+			new: true,
+		});
 
 		res.json({
 			ok: true,
@@ -146,7 +142,8 @@ const createUser = async (req, res = response) => {
 	}
 };
 const updateUser = async (req, res = response) => {
-	const { id: usuarioId, nombre, email, rol } = req.body;
+	const { nombre, email, rol } = req.body;
+	const { id: usuarioId } = req.params;
 	try {
 		const usuario = await Usuario.findById(usuarioId);
 		if (!usuario) {
@@ -162,13 +159,9 @@ const updateUser = async (req, res = response) => {
 			rol,
 		};
 
-		const usuarioActualizado = await Usuario.findByIdAndUpdate(
-			usuarioId,
-			nuevoUsuario,
-			{
-				new: true,
-			}
-		);
+		const usuarioActualizado = await Usuario.findByIdAndUpdate(usuarioId, nuevoUsuario, {
+			new: true,
+		});
 
 		res.json({
 			ok: true,
