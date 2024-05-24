@@ -35,7 +35,8 @@ const createProduct = async (req, res = response) => {
 	}
 };
 const updateProduct = async (req, res = response) => {
-	const { id: productoId, nombre, cantidad, description, precio, url } = req.body;
+	const { nombre, cantidad, description, precio, url } = req.body;
+	const { id: productoId } = req.params;
 	try {
 		const producto = await Producto.findById(productoId);
 		if (!producto) {
