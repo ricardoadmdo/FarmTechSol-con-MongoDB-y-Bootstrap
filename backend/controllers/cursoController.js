@@ -33,7 +33,8 @@ const createCurso = async (req, res = response) => {
 	}
 };
 const updateCurso = async (req, res = response) => {
-	const { id: cursoId, nombre, description, precio } = req.body;
+	const { nombre, description, precio } = req.body;
+	const { id: cursoId } = req.params;
 	try {
 		const curso = await Curso.findById(cursoId);
 		if (!curso) {
@@ -49,11 +50,7 @@ const updateCurso = async (req, res = response) => {
 			precio,
 		};
 
-		const cursoActualizado = await Curso.findByIdAndUpdate(
-			cursoId,
-			nuevoCurso,
-			{ new: true }
-		);
+		const cursoActualizado = await Curso.findByIdAndUpdate(cursoId, nuevoCurso, { new: true });
 
 		res.json({
 			ok: true,
