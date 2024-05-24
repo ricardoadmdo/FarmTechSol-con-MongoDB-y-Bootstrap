@@ -17,10 +17,10 @@ export const Curso = () => {
 
 	const getCursos = () => {
 		Axios.get('http://localhost:3001/api/curso/cursos')
-			.then(response => {
+			.then((response) => {
 				setCursos(response.data.cursos);
 			})
-			.catch(error => {
+			.catch((error) => {
 				console.log(error);
 			});
 	};
@@ -34,14 +34,11 @@ export const Curso = () => {
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
 			confirmButtonText: 'Si, comprar!',
-		}).then(result => {
+		}).then((result) => {
 			if (result.isConfirmed) {
 				Swal.fire({
 					title: '<strong>Curso comprado!!!</strong>',
-					html:
-						'<i>El curso <strong>' +
-						val.nombre +
-						'</strong> fue comprado con éxito</i>',
+					html: '<i>El curso <strong>' + val.nombre + '</strong> fue comprado con éxito</i>',
 					icon: 'success',
 					timer: 3000,
 				});
@@ -51,14 +48,12 @@ export const Curso = () => {
 
 	return (
 		<>
-			<div className='cursos animate__animated animate__fadeIn'>
-				{cursosList.map(val => (
-					<div key={val._id}>
-						<div className='col m-3 '>
-							<div className='cardC' style={{ width: '18rem' }}>
-								<h5 className='card-title'>
-									<strong>{val.nombre}</strong>
-								</h5>
+			<div className='container animate__animated animate__fadeIn my-5'>
+				<div className='row'>
+					{cursosList.map((val) => (
+						<div key={val._id} className='col-sm-6 col-md-4 col-lg-3 mb-4-3'>
+							<div className='card h-100 shadow'>
+								<h5 className='card-header'>{val.nombre}</h5>
 								<LazyLoadImage
 									effect='blur'
 									placeholderSrc={placeholder}
@@ -66,7 +61,7 @@ export const Curso = () => {
 									className='card-img-top'
 									alt='imagen de los cursos'
 								/>
-								<div className='card-body'>
+								<div className='card-body d-flex flex-column'>
 									<p className='card-text'>
 										<strong>Descripción:</strong> {val.description}
 									</p>
@@ -74,28 +69,19 @@ export const Curso = () => {
 										<strong>Precio:</strong> {val.precio} USD
 									</p>
 									<hr />
-
-									<div className='input-group-append'>
-										<button
-											className='btn btn-outline-dark'
-											onClick={() => addToCart(val, Number(1))}
-										>
+									<div className='mt-auto'>
+										<button className='btn btn-outline-dark' onClick={() => addToCart(val, Number(1))}>
 											<FontAwesomeIcon icon={faShoppingCart} />
 										</button>
-										<span style={{ marginRight: '5px' }}></span>{' '}
-										{/* Espacio entre los botones */}
-										<button
-											className='btn btn-success'
-											onClick={() => comprarCurso(val.id, val)}
-										>
+										<button className='btn btn-success ml-2' onClick={() => comprarCurso(val.id, val)}>
 											Comprar
 										</button>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				))}
+					))}
+				</div>
 			</div>
 		</>
 	);

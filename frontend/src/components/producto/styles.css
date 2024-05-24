@@ -1,0 +1,15 @@
+/* Estilo para el texto desplazado */
+.marquee-text {
+	display: inline-block;
+	animation: marquee 14s linear infinite;
+}
+
+/* Definición de la animación */
+@keyframes marquee {
+	0% {
+		transform: translateX(100%);
+	} /* Inicio: texto fuera de la pantalla a la derecha */
+	100% {
+		transform: translateX(-100%);
+	} /* Fin: texto fuera de la pantalla a la izquierda */
+}

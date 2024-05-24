@@ -51,38 +51,31 @@ export const Perfil = () => {
 	};
 
 	return (
-		<div className='profile-container card animate__animated animate__fadeIn'>
-			<div className='card-header'>
+		<div className='card mx-auto my-4 animate__animated animate__fadeIn' style={{ maxWidth: '400px' }}>
+			<div className='card-header text-center bg-light'>
 				<FontAwesomeIcon icon={faUserCircle} size='3x' />
-				<h2>{user.nombre}</h2>
+				<h2 className='h4'>{user.nombre}</h2>
 			</div>
 			<div className='card-body'>
 				{editMode ? (
-					<div className='profile-form'>
-						<input
-							type='text'
-							className='form-control mb-2'
-							value={newName}
-							onChange={e => setNewName(e.target.value)}
-						/>
+					<div>
+						<input type='text' className='form-control mb-2' value={newName} onChange={(e) => setNewName(e.target.value)} />
 
-						<button
-							className='btn btn-primary mr-2'
-							onClick={() => handleSaveChanges(user.uid, newName)}
-						>
-							Guardar cambios
-						</button>
-						<span style={{ marginRight: '5px' }}></span>
-						<button className='btn btn-secondary' onClick={handleCancel}>
-							Cancelar
-						</button>
+						<div className='d-flex justify-content-between'>
+							<button className='btn btn-primary' onClick={() => handleSaveChanges(user.uid, newName)}>
+								Guardar cambios
+							</button>
+							<button className='btn btn-secondary' onClick={handleCancel}>
+								Cancelar
+							</button>
+						</div>
 					</div>
 				) : (
 					<div>
 						<p className='card-text'>Nombre: {user.nombre}</p>
 						<p className='card-text'>Rol: {user.rol}</p>
 						<p className='card-text'>Correo: {user.email}</p>
-						<button className='btn btn-info' onClick={() => setEditMode(true)}>
+						<button className='btn btn-info w-100 mt-3' onClick={() => setEditMode(true)}>
 							Editar perfil
 						</button>
 					</div>

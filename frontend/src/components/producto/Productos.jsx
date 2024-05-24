@@ -1,11 +1,13 @@
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../auth/authContext';
-import { faShoppingCart, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import FiltroBusqueda from './FiltroBusqueda.jsx';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import placeholder from '../../images/placeholder.png';
+import './styles.css';
 
 export const Productos = () => {
 	const [cantidad, setCantidad] = useState(1);
@@ -105,29 +107,22 @@ export const Productos = () => {
 
 	return (
 		<div className='animate__animated animate__fadeIn'>
+			{/* Mensaje de bienvenida */}
 			<div className='marquee-container'>
-				<span className='marquee-text'>
+				<span className='marquee-text bg p-2'>
 					Bienvenido a FarmTechSol, la empresa de venta de productos de tecnología Agrícola avanzada más importante del país. ¡Descuentos
 					solo por hoy! No se lo pierda.
 				</span>
 			</div>
-			<div className='product '>
-				<div style={{ position: 'absolute', top: '110px', left: '20px' }}>
-					<label htmlFor='precio'>Precio a partir de:</label>
-					<input type='range' id='precio' min='0' max='4000' onChange={handleChangeMinPrecio} />
-					<span>${filters.minPrecio}</span>
-					<span style={{ marginRight: '970px' }}></span>
-					<input type='text' placeholder='Buscar por nombre' value={searchTerm} onChange={handleSearch} />
-					<FontAwesomeIcon icon={faSearch} style={{ marginLeft: '5px', cursor: 'pointer' }} />
-				</div>
-				{filteredProducts.map((val) => (
-					<div key={val._id}>
-						<div className='col m-3'>
-							<div className='cardP' style={{ width: '300px' }}>
-								<h5 className='card-title'>
-									<strong>{val.nombre}</strong>
-								</h5>
-
+			<div className='mb-3'>
+				<FiltroBusqueda filters={filters} searchTerm={searchTerm} handleChangeMinPrecio={handleChangeMinPrecio} handleSearch={handleSearch} />
+			</div>
+			<div className='container animate__animated animate__fadeIn my-5'>
+				<div className='row'>
+					{filteredProducts.map((val) => (
+						<div key={val._id} className='col-sm-6 col-md-4 col-lg-3 mb-4'>
+							<div className='card h-100 shadow'>
+								<h5 className='card-header'>{val.nombre}</h5>
 								<LazyLoadImage
 									threshold={10}
 									effect='blur'
@@ -136,7 +131,6 @@ export const Productos = () => {
 									className='card-img-top'
 									alt='Imagen del producto'
 								/>
-
 								<div className='card-body'>
 									<p className='card-text'>
 										<strong>Descripción:</strong> {val.description}
@@ -148,40 +142,37 @@ export const Productos = () => {
 										<strong>Precio:</strong> {val.precio} USD
 									</p>
 									<hr />
-									<div className='container'>
-										<div className='row align-items-center'>
-											<div className='col-4'>
-												<input
-													type='number'
-													className='form-control'
-													placeholder='Cantidad'
-													min='1'
-													defaultValue='1'
-													onChange={(e) => setCantidad(parseInt(e.target.value, 10))}
-												/>
-											</div>
-											<div className='col-8'>
-												<div className='input-group'>
-													<button
-														aria-label='añadir al carrito'
-														className=' btn btn-outline-dark'
-														onClick={() => addToCart(val, Number(cantidad))}
-													>
-														<FontAwesomeIcon icon={faShoppingCart} />
-													</button>
-													<span style={{ marginRight: '5px' }}></span> {/* Espacio entre los botones */}
-													<button className='btn btn-success' onClick={() => comprarProductos(val._id, val, cantidad)}>
-														Comprar
-													</button>
-												</div>
+									<div className='row align-items-center'>
+										<div className='col-4'>
+											<input
+												type='number'
+												className='form-control'
+												placeholder='Cantidad'
+												min='1'
+												defaultValue='1'
+												onChange={(e) => setCantidad(parseInt(e.target.value, 10))}
+											/>
+										</div>
+										<div className='col-8'>
+											<div className='input-group'>
+												<button
+													aria-label='añadir al carrito'
+													className='btn btn-outline-dark'
+													onClick={() => addToCart(val, Number(cantidad))}
+												>
+													<FontAwesomeIcon icon={faShoppingCart} />
+												</button>
+												<button className='btn btn-success' onClick={() => comprarProductos(val._id, val, cantidad)}>
+													Comprar
+												</button>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				))}
+					))}
+				</div>
 			</div>
 		</div>
 	);

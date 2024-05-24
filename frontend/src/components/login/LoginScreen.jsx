@@ -24,7 +24,7 @@ export const LoginScreen = () => {
 		});
 	};
 
-	const showConfirm = nombre => {
+	const showConfirm = (nombre) => {
 		Swal.fire({
 			title: 'Bienvenido a FarmTechSol <strong>' + nombre + '</strong>',
 			text: 'Sesión iniciada correctamente',
@@ -67,7 +67,7 @@ export const LoginScreen = () => {
 		}
 	};
 
-	const handleChange = e => {
+	const handleChange = (e) => {
 		const { name, value } = e.target;
 		if (name === 'email') {
 			setEmail(value);
@@ -81,48 +81,51 @@ export const LoginScreen = () => {
 	};
 
 	return (
-		<div className='containerr'>
-			<div className='background' style={{ backgroundImage: `url(${image1})` }}></div>
-			<div className='card animate__animated animate__fadeIn'>
-				<div className='login'>
-					<h3>Bienvenido Amigo!</h3>
-					<h2>Inicia Sesión</h2>
-					<form className='form' onSubmit={e => handleLogin(e, email, password)}>
-						<div className='textbox'>
-							<label className='label'>Su dirección de correo electrónico: </label>
-							<input
-								onChange={handleChange}
-								value={email}
-								type='email'
-								name='email'
-								placeholder='xxx@xxxx.com'
-								required
-							/>
-							<span className='fa fa-lock'></span>
-						</div>
-						<div className='textbox'>
-							<label className='label'>Contraseña: </label>
-							<input
-								onChange={handleChange}
-								value={password}
-								type={showPassword ? 'text' : 'password'}
-								name='password'
-								placeholder='Contraseña'
-								required
-							/>
-							<FontAwesomeIcon
-								className='fa'
-								icon={showPassword ? faEyeSlash : faEye}
-								onClick={togglePasswordVisibility}
-							/>
-						</div>
-						<button type='submit'>Iniciar Sesión</button>
-						<Link to='/register' className='link'>
-							{' '}
-							¿No tienes una cuenta? Regístrate aquí
-						</Link>
-					</form>
-				</div>
+		<div className='container d-flex justify-content-center align-items-center vh-100 '>
+			<div
+				className='position-absolute top-0 start-0 w-100 h-100'
+				style={{ backgroundImage: `url(${image1})`, backgroundSize: 'cover', zIndex: '-1' }}
+			></div>
+			<div className='card p-4 shadow text-center' style={{ borderRadius: '24px', backgroundColor: 'rgba(250, 250, 250, 0.819)', zIndex: '2' }}>
+				<h3 className='mb-3'>Bienvenido Amigo!</h3>
+				<h2 className='mb-4'>Inicia Sesión</h2>
+				<form className='d-grid gap-3' onSubmit={(e) => handleLogin(e, email, password)}>
+					<div className='form-group'>
+						<label>Su dirección de correo electrónico:</label>
+						<input
+							className='form-control'
+							onChange={handleChange}
+							value={email}
+							type='email'
+							name='email'
+							placeholder='xxx@xxxx.com'
+							required
+						/>
+					</div>
+					<div className='form-group position-relative'>
+						<label>Contraseña:</label>
+						<input
+							className='form-control'
+							onChange={handleChange}
+							value={password}
+							type={showPassword ? 'text' : 'password'}
+							name='password'
+							placeholder='Contraseña'
+							required
+						/>
+						<FontAwesomeIcon
+							className='position-absolute top-50 end-0 translate-middle-y me-3'
+							icon={showPassword ? faEyeSlash : faEye}
+							onClick={togglePasswordVisibility}
+						/>
+					</div>
+					<button className='btn btn-success' type='submit'>
+						Iniciar Sesión
+					</button>
+					<Link to='/register' className='text-primary'>
+						¿No tienes una cuenta? Regístrate aquí
+					</Link>
+				</form>
 			</div>
 		</div>
 	);

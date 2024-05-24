@@ -3,10 +3,11 @@ import Axios from 'axios';
 import Swal from 'sweetalert2';
 
 export const CRUDCurso = () => {
+	const [id, setId] = useState('');
 	const [nombre, setNombre] = useState('');
 	const [description, setDescription] = useState('');
 	const [precio, setPrecio] = useState('');
-	const [id, setId] = useState('');
+
 	const [operation, setOperation] = useState(1);
 	const [cursosList, setCursos] = useState([]);
 	const [title, setTitle] = useState('');
@@ -29,8 +30,7 @@ export const CRUDCurso = () => {
 				limpiarCampos();
 				Swal.fire({
 					title: '<strong>Registro exitoso!!!</strong>',
-					html:
-						'<i>El curso <strong>' + nombre + '</strong> fue registrado con éxito</i>',
+					html: '<i>El curso <strong>' + nombre + '</strong> fue registrado con éxito</i>',
 					icon: 'success',
 					timer: 3000,
 				});
@@ -59,8 +59,7 @@ export const CRUDCurso = () => {
 				limpiarCampos();
 				Swal.fire({
 					title: '<strong>Actualización exitoso!!!</strong>',
-					html:
-						'<i>El curso<strong>' + nombre + '</strong> fue actualizado con éxito</i>',
+					html: '<i>El curso<strong>' + nombre + '</strong> fue actualizado con éxito</i>',
 					icon: 'success',
 					timer: 3000,
 				});
@@ -77,7 +76,7 @@ export const CRUDCurso = () => {
 			});
 	};
 
-	const deleteCurso = val => {
+	const deleteCurso = (val) => {
 		Swal.fire({
 			title: 'Confirmar eliminado?',
 			html: '<i>Realmente desea eliminar a <strong>' + val.nombre + '</strong>?</i>',
@@ -86,7 +85,7 @@ export const CRUDCurso = () => {
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
 			confirmButtonText: 'Si, eliminarlo!',
-		}).then(result => {
+		}).then((result) => {
 			if (result.isConfirmed) {
 				Axios.delete(`http://localhost:3001/api/curso/delete/${val._id}`)
 					.then(() => {
@@ -120,15 +119,15 @@ export const CRUDCurso = () => {
 
 	const getCursos = () => {
 		Axios.get('http://localhost:3001/api/curso/cursos')
-			.then(response => {
+			.then((response) => {
 				setCursos(response.data.cursos);
 			})
-			.catch(error => {
+			.catch((error) => {
 				console.log(error);
 			});
 	};
 
-	const validar = event => {
+	const validar = (event) => {
 		event.preventDefault();
 		if (nombre.trim() === '' || description.trim() === '' || precio === '') {
 			Swal.fire({
@@ -175,12 +174,7 @@ export const CRUDCurso = () => {
 			<div className='row mt-3'>
 				<div className='col-md-4 offset-md-4'>
 					<div className='d-grid mx-auto'>
-						<button
-							onClick={() => openModal(1)}
-							className='btn btn-dark'
-							data-bs-toggle='modal'
-							data-bs-target='#modalCursos'
-						>
+						<button onClick={() => openModal(1)} className='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modalCursos'>
 							<i className='fa-solid fa-circle-plus'></i> Añadir nuevo Curso
 						</button>
 					</div>
@@ -199,7 +193,7 @@ export const CRUDCurso = () => {
 									</tr>
 								</thead>
 								<tbody className='table-group-divider'>
-									{cursosList.map(val => {
+									{cursosList.map((val) => {
 										return (
 											<tr key={val._id}>
 												<td>{val._id}</td>
@@ -210,13 +204,7 @@ export const CRUDCurso = () => {
 													<button
 														type='button'
 														onClick={() => {
-															openModal(
-																2,
-																val._id,
-																val.nombre,
-																val.description,
-																val.precio
-															);
+															openModal(2, val._id, val.nombre, val.description, val.precio);
 														}}
 														className='btn btn-warning'
 														data-bs-toggle='modal'
@@ -225,9 +213,7 @@ export const CRUDCurso = () => {
 														<i className='fa fa-edit'></i>
 														Editar
 													</button>
-													<span
-														style={{ marginRight: '0px' }}
-													></span>{' '}
+													<span style={{ marginRight: '0px' }}></span>{' '}
 													<button
 														type='button'
 														onClick={() => {
@@ -248,21 +234,12 @@ export const CRUDCurso = () => {
 					</div>
 				</div>
 			</div>
-			<div
-				id='modalCursos'
-				className='modal fade animate__animated animate__fadeIn'
-				aria-hidden='true'
-			>
+			<div id='modalCursos' className='modal fade animate__animated animate__fadeIn' aria-hidden='true'>
 				<div className='modal-dialog modal-dialog-centered'>
 					<div className='modal-content'>
 						<div className='modal-header'>
 							<label className='h5'>{title}</label>
-							<button
-								type='button'
-								className='btn-close'
-								data-bs-dismiss='modal'
-								aria-label='Close'
-							>
+							<button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close'>
 								{' '}
 							</button>
 						</div>
@@ -278,7 +255,7 @@ export const CRUDCurso = () => {
 										className='form-control'
 										placeholder='Ingrese un nombre'
 										value={nombre}
-										onChange={event => setNombre(event.target.value)}
+										onChange={(event) => setNombre(event.target.value)}
 									></input>
 								</div>
 
@@ -290,7 +267,7 @@ export const CRUDCurso = () => {
 										className='form-control'
 										placeholder='Ingrese una description'
 										value={description}
-										onChange={event => setDescription(event.target.value)}
+										onChange={(event) => setDescription(event.target.value)}
 									></input>
 								</div>
 
@@ -302,7 +279,7 @@ export const CRUDCurso = () => {
 										className='form-control'
 										placeholder='Ingrese un precio'
 										value={precio}
-										onChange={event => setPrecio(event.target.value)}
+										onChange={(event) => setPrecio(event.target.value)}
 									></input>
 								</div>
 							</form>
@@ -313,12 +290,7 @@ export const CRUDCurso = () => {
 							</div>
 
 							<div className='modal-footer'>
-								<button
-									id='btnCerrar'
-									type='button'
-									className='btn btn-secondary'
-									data-bs-dismiss='modal'
-								>
+								<button id='btnCerrar' type='button' className='btn btn-secondary' data-bs-dismiss='modal'>
 									<i className='fa fa-times'></i> Cerrar
 								</button>
 							</div>
