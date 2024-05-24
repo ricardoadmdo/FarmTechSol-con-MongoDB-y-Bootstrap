@@ -122,7 +122,6 @@ export const Productos = () => {
 					{filteredProducts.map((val) => (
 						<div key={val._id} className='col-sm-6 col-md-4 col-lg-3 mb-4'>
 							<div className='card h-100 shadow'>
-								<h5 className='card-header'>{val.nombre}</h5>
 								<LazyLoadImage
 									threshold={10}
 									effect='blur'
@@ -131,6 +130,7 @@ export const Productos = () => {
 									className='card-img-top'
 									alt='Imagen del producto'
 								/>
+								<h5 className='card-header'>{val.nombre}</h5>
 								<div className='card-body'>
 									<p className='card-text'>
 										<strong>Descripción:</strong> {val.description}

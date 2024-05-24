@@ -32,7 +32,7 @@ export const About = () => {
 								<div className='card-body'>
 									<h2 className='card-title'>Ricardo Alejandro D`Escoubet</h2>
 									<h3 className='card-subtitle mb-2 text-muted'>Desarrollador FullStack</h3>
-									<p className='card-text'>Se encarga de la lógica detrás del sitio, maneja bases de datos y servidores.</p>
+									<p className='card-text'>Desarrollador de la web.</p>
 								</div>
 							</div>
 						</div>

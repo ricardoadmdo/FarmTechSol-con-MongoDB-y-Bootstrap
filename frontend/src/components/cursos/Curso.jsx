@@ -53,7 +53,6 @@ export const Curso = () => {
 					{cursosList.map((val) => (
 						<div key={val._id} className='col-sm-6 col-md-4 col-lg-3 mb-4-3'>
 							<div className='card h-100 shadow'>
-								<h5 className='card-header'>{val.nombre}</h5>
 								<LazyLoadImage
 									effect='blur'
 									placeholderSrc={placeholder}
@@ -61,6 +60,7 @@ export const Curso = () => {
 									className='card-img-top'
 									alt='imagen de los cursos'
 								/>
+								<h5 className='card-header'>{val.nombre}</h5>
 								<div className='card-body d-flex flex-column'>
 									<p className='card-text'>
 										<strong>Descripción:</strong> {val.description}
