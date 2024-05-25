@@ -51,16 +51,17 @@ export const Perfil = () => {
 	};
 
 	return (
-		<div className='card mx-auto my-4 animate__animated animate__fadeIn' style={{ maxWidth: '400px' }}>
+		<div className='card mx-auto my-4 animate__animated animate__fadeIn'>
 			<div className='card-header text-center bg-light'>
-				<FontAwesomeIcon icon={faUserCircle} size='3x' />
-				<h2 className='h4'>{user.nombre}</h2>
+				<FontAwesomeIcon icon={faUserCircle} size='4x' />
+				<h2 className='h4'>
+					<b>{user.nombre}</b>
+				</h2>
 			</div>
 			<div className='card-body'>
 				{editMode ? (
 					<div>
 						<input type='text' className='form-control mb-2' value={newName} onChange={(e) => setNewName(e.target.value)} />
-
 						<div className='d-flex justify-content-between'>
 							<button className='btn btn-primary' onClick={() => handleSaveChanges(user.uid, newName)}>
 								Guardar cambios
@@ -72,9 +73,19 @@ export const Perfil = () => {
 					</div>
 				) : (
 					<div>
-						<p className='card-text'>Nombre: {user.nombre}</p>
-						<p className='card-text'>Rol: {user.rol}</p>
-						<p className='card-text'>Correo: {user.email}</p>
+						<p className='card-text'>
+							<b>Nombre: </b>
+							{user.nombre}
+						</p>
+						{user.rol !== 'Usuario' && (
+							<p className='card-text'>
+								<b>Rol:</b> {user.rol}
+							</p>
+						)}
+						<p className='card-text'>
+							<b>Correo Electrónico: </b>
+							{user.email}
+						</p>
 						<button className='btn btn-info w-100 mt-3' onClick={() => setEditMode(true)}>
 							Editar perfil
 						</button>
